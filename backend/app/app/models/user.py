@@ -6,7 +6,8 @@ from sqlalchemy.sql import func
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .item import Item  # noqa: F401
+    from .item import Item  
+    from .schedule import Schedule
 
 
 class User(Base):
@@ -21,9 +22,6 @@ class User(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
-
     items = relationship("Item", back_populates="owner")
     schedules = relationship("Schedule", back_populates="user")
-    my_challenges = relationship("Schedule", back_populates="master")
-
-    challenges = relationship('Challenge', secondary = 'link')
+    challenges = relationship("ChallengeUserDetail", back_populates="user")
