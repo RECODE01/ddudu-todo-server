@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.crud.base import CRUDBase
 from app.models.challenge_user_detail import ChallengeUserDetail
 from app.schemas.challenge_user_detail import ChallengeUserDetailCreate, ChallengeUserDetailUpdate
+from app.models.user import User
 # from app.schemas.item import ItemCreate, ItemUpdate
 
 
@@ -20,5 +21,12 @@ class CRUDChallengeUsers(CRUDBase[ChallengeUserDetail, ChallengeUserDetailCreate
         db.commit()
         db.refresh(db_obj)
         return db_obj
+        
+    def get_multi_by_challenge(
+        self, db: Session, *, challenge_id: str
+    ) -> List[User]:
+        details = db.query(self.model).filter(self.model.challenge_id==challenge_id).all()
+        users = list(map(lambda el: el.user, details))
+        return users
 
 challenge_users = CRUDChallengeUsers(ChallengeUserDetail)

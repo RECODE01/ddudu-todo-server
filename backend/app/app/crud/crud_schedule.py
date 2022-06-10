@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
 from app.models.schedule import Schedule
-from app.schemas.schedule import ScheduleCreate, ScheduleUpdate
+from app.schemas.schedule import ScheduleCreate, ScheduleUpdate, ChallengeScheduleCreate
 # from app.schemas.item import ItemCreate, ItemUpdate
 
 
@@ -16,6 +16,16 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
     ) -> Schedule:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, user_id=user_id)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
+    def create_with_challenge(
+        self, db: Session, *, obj_in: ChallengeScheduleCreate, user_id: int, challenge_info_id: int
+    ) -> Schedule:
+        obj_in_data = jsonable_encoder(obj_in)
+        db_obj = self.model(**obj_in_data, user_id=user_id, challenge_info_id=challenge_info_id)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

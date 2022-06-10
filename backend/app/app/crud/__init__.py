@@ -4,6 +4,7 @@ from .crud_schedule import schedule
 from .crud_challenge import challenge
 from .crud_challenge_user_detail import challenge_users
 from .crud_challenge_requset import  challenge_request
+from .crud_challenge_schedule_detail import challenge_schedule_detail
 # For a new basic set of CRUD operations you could just do
 
 # from .base import CRUDBase

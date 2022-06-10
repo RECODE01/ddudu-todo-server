@@ -12,7 +12,7 @@ class ScheduleBase(BaseModel):
     title: str
     contents: str
     image: Optional[str] = None
-    completed: bool
+    completed: Optional[bool] = False
     start_date: datetime.datetime
     end_date: Optional[datetime.datetime] = None
 
@@ -20,6 +20,12 @@ class ScheduleBase(BaseModel):
 # Properties to receive on item creation
 class ScheduleCreate(ScheduleBase):
     pass
+class ChallengeScheduleCreate(BaseModel):
+    title: str
+    contents: str
+    image: Optional[str] = None
+    start_date: datetime.datetime
+    end_date: Optional[datetime.datetime] = None
 
 # Properties to receive on item update
 class ScheduleUpdate(ScheduleBase):
