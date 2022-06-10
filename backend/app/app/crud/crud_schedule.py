@@ -1,4 +1,5 @@
 from typing import List
+from xmlrpc.client import Boolean
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
@@ -31,5 +32,17 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
             .all()
         )
 
+    def toggle_schedule_complete(
+        self, db: Session, *, db_obj: Schedule,
+    ) -> Schedule:
+        obj_data = jsonable_encoder(db_obj)
+        completed = True
+        if db_obj.completed is True:
+            completed = False
+        setattr(db_obj, "completed", completed)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
 
 schedule = CRUDSchedule(Schedule)

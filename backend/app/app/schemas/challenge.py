@@ -1,44 +1,47 @@
 import datetime
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel
-from sqlalchemy import Date, DateTime
-
-from app.models.challenge_schedule_detail import ChallengeScheduleDetail
-
 
 # Shared properties
-class ScheduleBase(BaseModel):
-    title: str
+class Challenge(BaseModel):
+    name: str
     contents: str
     image: Optional[str] = None
-    completed: bool
     start_date: datetime.datetime
     end_date: Optional[datetime.datetime] = None
-
+    tags: Optional[List[str]] = None
 
 # Properties to receive on item creation
-class ScheduleCreate(ScheduleBase):
+class ChallengeCreate(Challenge):
     pass
 
 # Properties to receive on item update
-class ScheduleUpdate(ScheduleBase):
+class ChallengeUpdate(Challenge):
     pass
 
 
 # Properties shared by models stored in DB
-class ScheduleInDBBase(ScheduleBase):
+class ChallengeInDBBase(Challenge):
     id: int
-    challenge_info: None
+    class Config:
+        orm_mode = True
+
+class ChallengeDetailInDBBase(Challenge):
+    id: int
+    # user_details
+    # schedules
     class Config:
         orm_mode = True
 
 
 # Properties to return to client
-class Schedule(ScheduleInDBBase):
+class Challenge(ChallengeInDBBase):
     pass
 
+class ChallengeDetail(ChallengeDetailInDBBase):
+    pass
 
 # Properties properties stored in DB
-class ScheduleInDB(ScheduleInDBBase):
+class ChallengeInDB(ChallengeInDBBase):
     pass

@@ -2,6 +2,7 @@ import sched
 from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import Boolean
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -97,3 +98,20 @@ def delete_item(
         raise HTTPException(status_code=400, detail="Not enough permissions")
     schedule = crud.schedule.remove(db=db, id=id)
     return schedule
+
+@router.patch("/toggle-complete/{id}", response_model=schemas.Schedule)
+def toggle_schedule(
+    *,
+    db: Session = Depends(deps.get_db),
+    id: int,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    toggle schedule complete value.
+    """
+    schedule = crud.schedule.get(db=db, id=id)
+    if not schedule:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    if not crud.user.is_superuser(current_user) and (schedule.user_id != current_user.id):
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    return crud.schedule.toggle_schedule_complete(db=db, db_obj=schedule)

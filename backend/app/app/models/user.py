@@ -25,3 +25,4 @@ class User(Base):
     items = relationship("Item", back_populates="owner")
     schedules = relationship("Schedule", back_populates="user")
     challenges = relationship("ChallengeUserDetail", back_populates="user")
+    requests = relationship("ChallengeRequest", back_populates="user")
