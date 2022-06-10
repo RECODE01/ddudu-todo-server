@@ -20,13 +20,13 @@ def read_schedules(
     """
     Retrieve Schedules.
     """
-    schedules = crud.schedule.get_multi_by_owner(
+    schedules = crud.schedule.get_multi_by_user(
         db=db, user_id=current_user.id, page=page, per_page=per_page
     )
     return schedules
 
 
-@router.post("/", response_model=schemas.UserSchedules)
+@router.post("/", response_model=schemas.Schedule)
 def create_schedules(
     *,
     db: Session = Depends(deps.get_db),
@@ -40,7 +40,7 @@ def create_schedules(
     return schedule
 
 
-@router.put("/{id}", response_model=schemas.UserSchedules)
+@router.put("/{id}", response_model=schemas.Schedule)
 def update_item(
     *,
     db: Session = Depends(deps.get_db),
@@ -54,8 +54,8 @@ def update_item(
     schedule = crud.schedule.get(db=db, id=id)
     if not schedule:
         raise HTTPException(status_code=404, detail="Schedule not found")
-    if schedule.challange_id is not None and schedule.challange.owner_id != current_user.id:
-        raise HTTPException(status_code=400, detail="Not enough permissions")
+    # if schedule.challenge_info_id is not None and schedule.challenge_info.challenge != current_user.id:
+    #     raise HTTPException(status_code=400, detail="Not enough permissions")
     if not crud.user.is_superuser(current_user) and (schedule.user_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     item = crud.schedule.update(db=db, db_obj=schedule, obj_in=schedule_in)

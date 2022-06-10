@@ -4,21 +4,21 @@ from typing import Optional
 from pydantic import BaseModel
 from sqlalchemy import Date, DateTime
 
+from app.models.challenge_schedule_detail import ChallengeScheduleDetail
+
 
 # Shared properties
 class ScheduleBase(BaseModel):
-    id: int
     title: str
     contents: str
     image: Optional[str] = None
-    start_date = DateTime
-    # end_date: Optional[DateTime] = None
+    start_date: datetime.datetime
+    end_date: Optional[datetime.datetime] = None
 
 
 # Properties to receive on item creation
 class ScheduleCreate(ScheduleBase):
-    challange_id: Optional[str] = None
-
+    pass
 
 # Properties to receive on item update
 class ScheduleUpdate(ScheduleBase):
@@ -28,9 +28,7 @@ class ScheduleUpdate(ScheduleBase):
 # Properties shared by models stored in DB
 class ScheduleInDBBase(ScheduleBase):
     id: int
-    title: str
-    user_id: int
-
+    challenge_info: None
     class Config:
         orm_mode = True
 

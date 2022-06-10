@@ -9,7 +9,7 @@ from app.schemas.schedule import ScheduleCreate, ScheduleUpdate
 # from app.schemas.item import ItemCreate, ItemUpdate
 
 
-class CRUDItem(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
+class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
     def create_with_user(
         self, db: Session, *, obj_in: ScheduleCreate, user_id: int
     ) -> Schedule:
@@ -32,4 +32,4 @@ class CRUDItem(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
         )
 
 
-schedule = CRUDItem(Schedule)
+schedule = CRUDSchedule(Schedule)
