@@ -35,7 +35,6 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
     def toggle_schedule_complete(
         self, db: Session, *, db_obj: Schedule,
     ) -> Schedule:
-        obj_data = jsonable_encoder(db_obj)
         completed = True
         if db_obj.completed is True:
             completed = False

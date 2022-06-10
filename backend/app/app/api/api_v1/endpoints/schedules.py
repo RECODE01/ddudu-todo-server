@@ -99,7 +99,7 @@ def delete_item(
     schedule = crud.schedule.remove(db=db, id=id)
     return schedule
 
-@router.patch("/toggle-complete/{id}", response_model=schemas.Schedule)
+@router.post("/toggle-complete/{id}", response_model=schemas.Schedule)
 def toggle_schedule(
     *,
     db: Session = Depends(deps.get_db),

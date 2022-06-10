@@ -19,7 +19,7 @@ class Challenge(Base):
     end_date = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    tags = Column(ARRAY(str), nullable=True)
+    tags = Column(ARRAY(String), nullable=True)
     user_details = relationship("ChallengeUserDetail", back_populates="challenge")
     schedules = relationship("ChallengeScheduleDetail", back_populates="challenge")
     requests = relationship("ChallengeRequest", back_populates="challenge")
