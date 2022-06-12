@@ -8,6 +8,7 @@ from app.crud.base import CRUDBase
 from app.crud.crud_challenge_user_detail import challenge_users
 from app.models.cahllenge import Challenge
 from app.schemas.challenge import ChallengeCreate, ChallengeUpdate
+from app.models.challenge_user_detail import ChallengeUserDetail
 # from app.schemas.item import ItemCreate, ItemUpdate
 
 
@@ -28,13 +29,11 @@ class CRUDChallenge(CRUDBase[Challenge, ChallengeCreate, ChallengeUpdate]):
     def get_multi_by_user(
         self, db: Session, *, user_id: int, page: int = 0, per_page: int = 100
     ) -> List[Challenge]:
-        return (
-            db.query(self.model)
-            .filter(Challenge.user_id == user_id)
-            .offset(page)
-            .limit(per_page)
-            .all()
-        )
+        return list(map(lambda ch: ch.challenge, db.query(ChallengeUserDetail)
+        .filter(ChallengeUserDetail.user_id ==user_id)
+        .offset(page)
+        .limit(per_page)
+        .all()))
 
 
 challenge = CRUDChallenge(Challenge)

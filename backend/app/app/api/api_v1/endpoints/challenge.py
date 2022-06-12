@@ -36,8 +36,10 @@ def create_challenges(
     """
     Create new Challenge.
     """
-    challenge = crud.challenge.create_with_user(db=db, obj_in=challenge_in, user_id=current_user.id)
+    challenge = crud.challenge.create_with_user(
+        db=db, obj_in=challenge_in, user_id=current_user.id)
     return challenge
+
 
 @router.post("/schedules/{challenge_id}", response_model=schemas.ChallengeScheduleDetail)
 def create_challenge_schedule(
@@ -50,11 +52,14 @@ def create_challenge_schedule(
     """
     Create new challenge scheduele.
     """
-    challenge_schedule = crud.challenge_schedule_detail.create_with_user(db=db, obj_in=challenge_in, challenge_id=challenge_id)
-    challenge_users = crud.challenge_users.get_multi_by_challenge(db=db, challenge_id=challenge_id)
+    challenge_schedule = crud.challenge_schedule_detail.create_with_user(
+        db=db, obj_in=challenge_in, challenge_id=challenge_id)
+    challenge_users = crud.challenge_users.get_multi_by_challenge(
+        db=db, challenge_id=challenge_id)
 
     for user in challenge_users:
-        crud.schedule.create_with_challenge(db=db, user_id=user.id, obj_in=challenge_in , challenge_info_id=challenge_schedule.id)
+        crud.schedule.create_with_challenge(
+            db=db, user_id=user.id, obj_in=challenge_in, challenge_info_id=challenge_schedule.id)
 
     return challenge_schedule
 
@@ -85,16 +90,19 @@ def create_challenge_schedule(
 def read_item(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    challenge_id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Get challenge by ID.
     """
-    challenge = crud.challenge.get(db=db, id=id)
+    challenge = crud.challenge.get(db=db, id=challenge_id)
     if not challenge:
         raise HTTPException(status_code=404, detail="Challenge not found")
-    if not crud.user.is_superuser(current_user) and (challenge.user_id != current_user.id):
+    challenge_users = crud.challenge_users.get_multi_by_challenge(
+        db=db, challenge_id=challenge_id)
+    print(crud.challenge_users.get_is_challenge_user(db=db, challenge_id=challenge_id, user_id=current_user.id), "====")
+    if not crud.user.is_superuser(current_user) and not crud.challenge_users.get_is_challenge_user(db=db, challenge_id=challenge_id, user_id=current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     return challenge
 
@@ -116,6 +124,7 @@ def delete_item(
         raise HTTPException(status_code=400, detail="Not enough permissions")
     challenge = crud.challenge.remove(db=db, id=id)
     return challenge
+
 
 @router.patch("/toggle-complete/{id}", response_model=schemas.Challenge)
 def toggle_challenge(

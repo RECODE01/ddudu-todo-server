@@ -29,4 +29,16 @@ class CRUDChallengeUsers(CRUDBase[ChallengeUserDetail, ChallengeUserDetailCreate
         users = list(map(lambda el: el.user, details))
         return users
 
+    def get_is_challenge_master(
+        self, db: Session, *, challenge_id: str, user_id: str
+    ) -> bool:
+        details = db.query(self.model).filter(self.model.challenge_id==challenge_id and self.model.is_master == True and user_id == user_id).all()
+        return len(details) > 0
+    
+    def get_is_challenge_user(
+        self, db: Session, *, challenge_id: str, user_id: str
+    ) -> bool:
+        details = db.query(self.model).filter(self.model.challenge_id==challenge_id and self.model.user == user_id).all()
+        return len(details) > 0
+
 challenge_users = CRUDChallengeUsers(ChallengeUserDetail)
