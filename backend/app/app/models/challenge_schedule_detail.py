@@ -18,7 +18,7 @@ class ChallengeScheduleDetail(Base):
     schedules = relationship("Schedule", back_populates="challenge_info")
     title = Column(String, nullable=False)
     contents = Column(String, nullable=False)
-    image = Column(String, nullable=False)
+    image = Column(String, nullable=True)
     start_date = Column(DateTime, default=func.now(), nullable=False)
     end_date = Column(DateTime, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

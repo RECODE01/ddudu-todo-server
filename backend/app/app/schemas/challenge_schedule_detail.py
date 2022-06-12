@@ -9,7 +9,7 @@ from pydantic import BaseModel
 class ChallengeScheduleDetail(BaseModel):
     title: str
     contents: str
-    image: str
+    image: Optional[str] = None
     start_date: datetime.date
     end_date: Optional[datetime.date] = None
     pass
