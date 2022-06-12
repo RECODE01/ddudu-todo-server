@@ -45,7 +45,7 @@ class CRUDChallengeUsers(CRUDBase[ChallengeUserDetail, ChallengeUserDetailCreate
     ) -> bool:
         details = (db.query(self.model)
                     .filter(self.model.challenge_id == challenge_id)
-                    .filter(self.model.user == user_id).all())
+                    .filter(self.model.user_id == user_id).all())
         return len(details) > 0
 
 

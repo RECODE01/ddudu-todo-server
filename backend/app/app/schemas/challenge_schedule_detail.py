@@ -1,5 +1,6 @@
 import datetime
 from typing import Optional
+from app.schemas.user import User
 
 from pydantic import BaseModel
 
@@ -52,3 +53,7 @@ class ChallengeScheduleDetailDetail(ChallengeScheduleDetailDetailInDBBase):
 
 class ChallengeScheduleDetailInDB(ChallengeScheduleDetailInDBBase):
     pass
+
+class ChallengeScheduleComplete(BaseModel):
+    completed: bool
+    user: User

@@ -21,6 +21,23 @@ class CRUDChallengeSchedules(CRUDBase[ChallengeScheduleDetail, ChallengeSchedule
         db.commit()
         db.refresh(db_obj)
         return db_obj
+    
+    def get_multi_by_challenge(
+        self, db: Session, *, challenge_id: int, page:int = 1, per_page:int = 10
+    ) -> List[ChallengeScheduleDetail]:
+        if (page == 0):
+            page = 1
+        if page == 0 or page == 1:
+            skip = 0
+        else:
+            skip = (page - 1) * per_page - 1
+        return (
+            db.query(ChallengeScheduleDetail)
+            .filter(ChallengeScheduleDetail.challenge_id == challenge_id)
+            .offset(skip)
+            .limit(per_page)
+            .all()
+        )
 
     def get_multi_by_date(
         self, db: Session, *, date: date, challenge_id: int
