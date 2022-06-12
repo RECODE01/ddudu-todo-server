@@ -10,20 +10,36 @@ from app.api import deps
 router = APIRouter()
 
 
+
 @router.get("/", response_model=List[schemas.Challenge])
-def read_challenges(
+def read_my_challenges(
+    db: Session = Depends(deps.get_db),
+    page: int = 0,
+    per_page: int = 0,
+) -> Any:
+    """
+    Retrieve Challenges.
+    """
+    challenges = crud.challenge.get_multi(
+        db=db, page=page, per_page=per_page
+    )
+    return challenges
+
+@router.get("/my", response_model=List[schemas.Challenge])
+def read_my_challenges(
     db: Session = Depends(deps.get_db),
     page: int = 0,
     per_page: int = 0,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Retrieve Challenges.
+    Retrieve my Challenges.
     """
     challenges = crud.challenge.get_multi_by_user(
         db=db, user_id=current_user.id, page=page, per_page=per_page
     )
     return challenges
+
 
 
 @router.post("/", response_model=schemas.Challenge)

@@ -26,14 +26,23 @@ class CRUDChallenge(CRUDBase[Challenge, ChallengeCreate, ChallengeUpdate]):
 
         return db_obj
 
+    def get_multi(self, db: Session, *, page: int = 0, per_page: int = 100) -> List[Challenge]:
+        if (page == 0):
+            page = 1
+        if page == 0 or page == 1:
+            skip = 0
+        else:
+            skip = (page - 1) * per_page - 1
+        return super().get_multi(db, skip=skip, limit=per_page)
+
     def get_multi_by_user(
         self, db: Session, *, user_id: int, page: int = 0, per_page: int = 100
     ) -> List[Challenge]:
         return list(map(lambda ch: ch.challenge, db.query(ChallengeUserDetail)
-        .filter(ChallengeUserDetail.user_id ==user_id)
-        .offset(page)
-        .limit(per_page)
-        .all()))
+                        .filter(ChallengeUserDetail.user_id == user_id)
+                        .offset(page)
+                        .limit(per_page)
+                        .all()))
 
 
 challenge = CRUDChallenge(Challenge)
