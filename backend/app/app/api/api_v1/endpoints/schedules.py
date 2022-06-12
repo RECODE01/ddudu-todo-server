@@ -14,8 +14,8 @@ router = APIRouter()
 @router.get("/", response_model=List[schemas.Schedule])
 def read_schedules(
     db: Session = Depends(deps.get_db),
-    page: int = 0,
-    per_page: int = 0,
+    page: int = 1,
+    per_page: int = 10,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """

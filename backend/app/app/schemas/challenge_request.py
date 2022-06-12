@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from app.schemas.challenge import Challenge
+
 # Shared properties
 class ChallengeRequest(BaseModel):
     pass
@@ -10,11 +12,9 @@ class ChallengeRequest(BaseModel):
 # Properties to receive on item creation
 class ChallengeRequestCreate(ChallengeRequest):
     challenge_id: str
-    pass
 
 class ChallengeRequestUpdate(ChallengeRequest):
     challenge_id: str
-    pass
 
 class ChallengeRequestAccept(ChallengeRequest):
     id: int
@@ -36,6 +36,7 @@ class ChallengeRequestDetailInDBBase(ChallengeRequest):
 
 # Properties to return to client
 class ChallengeRequest(ChallengeRequestInDBBase):
+    challenge: Challenge
     pass
 
 class ChallengeRequestDetail(ChallengeRequestDetailInDBBase):

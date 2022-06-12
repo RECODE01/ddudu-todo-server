@@ -13,8 +13,8 @@ router = APIRouter()
 @router.get("/", response_model=List[schemas.ChallengeScheduleDetail])
 def get_challenge_requests(
     db: Session = Depends(deps.get_db),
-    page: int = 0,
-    per_page: int = 0,
+    page: int = 1,
+    per_page: int = 10,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     challenges = crud.challenge.get_multi_by_user(
@@ -64,13 +64,12 @@ def accept_challenge_request(
             status_code=404, detail="Challenge request is already accepted")
     if not challenge_request:
         raise HTTPException(status_code=404, detail="Challenge request not found")
-    # 권한 부분 함수화해서 일괄 수정 예정??????
-    # if not crud.user.is_superuser(current_user) and (challenge_request.user_id != current_user.id):
-    #     raise HTTPException(status_code=400, detail="Not enough permissions")
-    result = crud.challenge_request.accept_challenge_request(
+    crud.challenge_request.accept_challenge_request(
         db=db, db_obj=challenge_request)
     crud.challenge_users.create_with_user(
         db=db, obj_in={"challenge_id": challenge_request.challenge_id}, user_id=current_user.id)
+    crud.challenge_schedule_detail.get_multi()
+    crud.schedule.create_with_challenge(db=db, user_id=challenge_request.user_id, )
     return {"msg": "챌린지 참가 신청을 수락하였습니다."}
 
 

@@ -32,7 +32,7 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
         return db_obj
 
     def get_multi_by_user(
-        self, db: Session, *, user_id: int, page: int = 0, per_page: int = 100
+        self, db: Session, *, user_id: int, page: int = 1, per_page: int = 100
     ) -> List[Schedule]:
         return (
             db.query(self.model)

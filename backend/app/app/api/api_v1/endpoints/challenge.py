@@ -14,8 +14,8 @@ router = APIRouter()
 @router.get("/", response_model=List[schemas.Challenge])
 def read_my_challenges(
     db: Session = Depends(deps.get_db),
-    page: int = 0,
-    per_page: int = 0,
+    page: int = 1,
+    per_page: int = 10,
 ) -> Any:
     """
     Retrieve Challenges.
@@ -28,8 +28,8 @@ def read_my_challenges(
 @router.get("/my", response_model=List[schemas.Challenge])
 def read_my_challenges(
     db: Session = Depends(deps.get_db),
-    page: int = 0,
-    per_page: int = 0,
+    page: int = 1,
+    per_page: int = 10,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """

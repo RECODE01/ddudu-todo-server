@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List
 from xmlrpc.client import Boolean
 
@@ -20,5 +21,13 @@ class CRUDChallengeSchedules(CRUDBase[ChallengeScheduleDetail, ChallengeSchedule
         db.commit()
         db.refresh(db_obj)
         return db_obj
+
+    def get_multi_by_date(
+        self, db: Session, *, date: date, challenge_id: int
+    ) -> List[ChallengeScheduleDetail]:
+        schedules = db.query(self.model).filter(
+            self.model.challenge_id == challenge_id).filter(self.model.start_date < date).all()
+        return schedules
+
 
 challenge_schedule_detail = CRUDChallengeSchedules(ChallengeScheduleDetail)
