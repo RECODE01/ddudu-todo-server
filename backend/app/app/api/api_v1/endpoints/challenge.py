@@ -39,7 +39,7 @@ def create_challenges(
     challenge = crud.challenge.create_with_user(db=db, obj_in=challenge_in, user_id=current_user.id)
     return challenge
 
-@router.post("/{challenge_id}/schedule", response_model=schemas.ChallengeScheduleDetail)
+@router.post("/schedules/{challenge_id}", response_model=schemas.ChallengeScheduleDetail)
 def create_challenge_schedule(
     *,
     db: Session = Depends(deps.get_db),
