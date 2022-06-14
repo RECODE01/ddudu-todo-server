@@ -1,6 +1,7 @@
 from typing import List
 from xmlrpc.client import Boolean
 
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -53,5 +54,7 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
+
+    
 
 schedule = CRUDSchedule(Schedule)

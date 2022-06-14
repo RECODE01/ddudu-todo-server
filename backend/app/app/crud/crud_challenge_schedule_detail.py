@@ -1,6 +1,8 @@
 from datetime import date
 from typing import List
 from xmlrpc.client import Boolean
+from app.schemas.challenge_schedule_detail import ChallengeScheduleComplete
+from app.models.schedule import Schedule
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
@@ -46,5 +48,21 @@ class CRUDChallengeSchedules(CRUDBase[ChallengeScheduleDetail, ChallengeSchedule
             self.model.challenge_id == challenge_id).filter(self.model.start_date < date).all()
         return schedules
 
+    def get_multi_by_complete_user(
+        self, db: Session, *, challenge_detail_id: int, page: int = 1, per_page: int = 10
+    ) -> List[Schedule]:
+        if (page == 0):
+            page = 1
+        if page == 0 or page == 1:
+            skip = 0
+        else:
+            skip = (page - 1) * per_page - 1
+        return (
+            db.query(Schedule)
+            .filter(Schedule.challenge_info_id == challenge_detail_id)
+            .offset(skip)
+            .limit(per_page)
+            .all()
+        )
 
 challenge_schedule_detail = CRUDChallengeSchedules(ChallengeScheduleDetail)

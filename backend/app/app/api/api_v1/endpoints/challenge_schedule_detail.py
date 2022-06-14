@@ -7,6 +7,7 @@ from app import crud, models, schemas
 from app.api import deps
 from app.schemas.schedule import ChallengeScheduleCreate
 
+
 router = APIRouter()
 
 
@@ -90,3 +91,21 @@ def refuse_challenge_request(
         raise HTTPException(status_code=400, detail="Not enough permissions")
     challenge = crud.challenge.remove(db=db, id=id)
     return {"msg": "챌린지 참가 신청을 거절하였습니다."}
+
+@router.get("/{challenge_detail_id}/users", response_model=List[schemas.ChallengeScheduleComplete]) #response_model의 기능, 객체를 입력 보내준다.
+def read_challenge_schedule_users(
+        *,
+        db: Session = Depends(deps.get_db),
+        page: int = 0,
+        per_page: int = 0,
+        challenge_detail_id: int,
+        # current_user: models.User = Depends(deps.get_current_active_user),
+    ) -> Any :
+        """
+        맘껏 쓰세요~
+        """
+
+        challenge_schedule_complete = crud.challenge_schedule_detail.get_multi_by_complete_user(db=db, challenge_detail_id=challenge_detail_id, page=page, per_page=per_page)
+
+        return challenge_schedule_complete
+

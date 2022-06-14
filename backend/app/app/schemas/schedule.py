@@ -1,5 +1,6 @@
 import datetime
 from typing import Optional
+from app.schemas.user import User
 
 from pydantic import BaseModel
 from sqlalchemy import Date, DateTime
@@ -35,7 +36,8 @@ class ScheduleUpdate(ScheduleBase):
 # Properties shared by models stored in DB
 class ScheduleInDBBase(ScheduleBase):
     id: int
-    challenge_info: None
+    user : User
+    # challenge_info: None
     class Config:
         orm_mode = True
 

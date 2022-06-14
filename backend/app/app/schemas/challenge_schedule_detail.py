@@ -57,3 +57,5 @@ class ChallengeScheduleDetailInDB(ChallengeScheduleDetailInDBBase):
 class ChallengeScheduleComplete(BaseModel):
     completed: bool
     user: User
+    class Config:
+        orm_mode = True
