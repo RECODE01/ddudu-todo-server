@@ -55,6 +55,5 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, ScheduleUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-    
 
 schedule = CRUDSchedule(Schedule)

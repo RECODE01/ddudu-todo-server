@@ -6,9 +6,31 @@ from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
+from sqlalchemy.sql import text
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
+    def get(self, db: Session, id: int) -> User :
+        return(db.execute(text(
+            """
+            select  *,
+    (select 
+        count(*) 
+     from 
+         schedule 
+     where 
+         user_id = :id and  
+         completed is TRUE)/
+     (select 
+         count(*) 
+     from 
+         schedule 
+     where 
+        user_id = :id) :: decimal as complete_rate from "user" where id = :id;
+     """), {'id':id}).fetchone())
+        
+        
+
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         return db.query(User).filter(User.email == email).first()
 

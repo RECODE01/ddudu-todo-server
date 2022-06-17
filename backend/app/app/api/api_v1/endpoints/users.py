@@ -102,3 +102,17 @@ def read_user_by_id(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return user
+
+@router.get("/completeRate/{user_id}", response_model=float)
+def read_user_complete_rate_by_id(
+    user_id : int,
+    # current_user: models.User = Depends(deps.get_current_active_user),
+    db: Session = Depends(deps.get_db),
+)   -> Any:
+    """
+    Get a specific user by id.
+    """
+
+    user_complete_rate = crud.schedule.get_complete_rate_by_user_id(db=db, user_id=user_id)
+
+    return user_complete_rate

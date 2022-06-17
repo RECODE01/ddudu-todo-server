@@ -1,5 +1,4 @@
-from typing import Optional
-
+from typing import List, Optional
 from pydantic import BaseModel, EmailStr
 
 
@@ -23,7 +22,7 @@ class UserUpdate(UserBase):
 
 class UserInDBBase(UserBase):
     id: Optional[int] = None
-
+    complete_rate: Optional[float] = None
     class Config:
         orm_mode = True
 
@@ -31,7 +30,6 @@ class UserInDBBase(UserBase):
 # Additional properties to return via API
 class User(UserInDBBase):
     pass
-
 
 # Additional properties stored in DB
 class UserInDB(UserInDBBase):

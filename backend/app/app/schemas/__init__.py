@@ -2,7 +2,7 @@ from .item import Item, ItemCreate, ItemInDB, ItemUpdate
 from .schedule import Schedule, ScheduleCreate, ScheduleInDB, ScheduleUpdate, ChallengeScheduleCreate
 from .msg import Msg
 from .token import Token, TokenPayload
-from .user import User, UserCreate, UserInDB, UserUpdate
+from .user import User, UserCreate, UserInDB, UserUpdate, UserCompleteRate
 from .challenge import Challenge, ChallengeCreate, ChallengeDetail
 from .challenge_user_detail import ChallengeUserDetail, ChallengeUserDetailCreate, ChallengeUserDetailUpdate
 from .challenge_request import ChallengeRequest, ChallengeRequestAccept, ChallengeRequestCreate
