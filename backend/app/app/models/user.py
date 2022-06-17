@@ -26,4 +26,5 @@ class User(Base):
     schedules = relationship("Schedule", back_populates="user")
     challenges = relationship("ChallengeUserDetail", back_populates="user")
     requests = relationship("ChallengeRequest", back_populates="user")
+    chatting_histories = relationship("ChattingHistory", back_populates="user")
     

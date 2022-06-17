@@ -23,3 +23,4 @@ class Challenge(Base):
     user_details = relationship("ChallengeUserDetail", back_populates="challenge")
     schedules = relationship("ChallengeScheduleDetail", back_populates="challenge")
     requests = relationship("ChallengeRequest", back_populates="challenge")
+    chatting_histories = relationship("ChattingHistory", back_populates="challenge")
