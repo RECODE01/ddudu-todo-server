@@ -1,5 +1,6 @@
 import datetime
 from typing import List, Optional
+from app.schemas.user import User
 
 from pydantic import BaseModel
 
@@ -11,6 +12,7 @@ class Challenge(BaseModel):
     start_date: datetime.datetime
     end_date: Optional[datetime.datetime] = None
     tags: Optional[List[str]] = None
+    master : User
 
 # Properties to receive on item creation
 class ChallengeCreate(Challenge):
@@ -37,6 +39,7 @@ class ChallengeDetailInDBBase(Challenge):
 
 # Properties to return to client
 class Challenge(ChallengeInDBBase):
+    user_cnt : int
     pass
 
 class ChallengeDetail(ChallengeDetailInDBBase):
