@@ -13,21 +13,34 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def get(self, db: Session, id: int) -> User :
         return(db.execute(text(
             """
-            select  *,
-    (select 
-        count(*) 
-     from 
-         schedule 
-     where 
-         user_id = :id and  
-         completed is TRUE)/
-     (select 
-         count(*) 
-     from 
-         schedule 
-     where 
-        user_id = :id) :: decimal as complete_rate from "user" where id = :id;
-     """), {'id':id}).fetchone())
+                WITH schedule_cnt AS (
+                select
+                    (select 
+                		count(*) 
+                	from 
+                 		schedule 
+                 	where 
+                		user_id = :id) as scheduleCnt, 
+                	(select 
+                		count(*) 
+                	from 
+                		schedule 
+                	where 
+                		user_id = :id and  
+                		completed is TRUE) as completeCnt
+                )
+                select 
+                	"user".*,
+                	case when schedule_cnt.scheduleCnt < 1 then 0 :: decimal
+                	else schedule_cnt.completeCnt / schedule_cnt.scheduleCnt :: decimal  
+                	end as complete_rate
+                from 
+                	"user"
+                	cross join
+                		schedule_cnt
+                where 
+                	"user".id = :id;
+            """), {'id':id}).fetchone())
         
         
 
