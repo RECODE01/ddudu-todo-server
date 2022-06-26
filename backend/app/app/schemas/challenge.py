@@ -12,7 +12,6 @@ class Challenge(BaseModel):
     start_date: datetime.datetime
     end_date: Optional[datetime.datetime] = None
     tags: Optional[List[str]] = None
-    master : User
 
 # Properties to receive on item creation
 class ChallengeCreate(Challenge):
@@ -31,8 +30,7 @@ class ChallengeInDBBase(Challenge):
 
 class ChallengeDetailInDBBase(Challenge):
     id: int
-    # user_details
-    # schedules
+    master : User
     class Config:
         orm_mode = True
 
