@@ -37,7 +37,7 @@ class ChallengeDetailInDBBase(Challenge):
 
 # Properties to return to client
 class Challenge(ChallengeInDBBase):
-    user_cnt : int
+    user_cnt : Optional[int] = 1
     pass
 
 class ChallengeDetail(ChallengeDetailInDBBase):
